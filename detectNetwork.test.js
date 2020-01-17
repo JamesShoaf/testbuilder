@@ -7,6 +7,7 @@
 // other places in this file where you'll replace the FILL_ME_IN with a
 // different value.
 var FILL_ME_IN = 'Fill this value in';
+var should = chai.should();
 
 describe('Introduction to Mocha Tests - READ ME FIRST', function() {
   // A Mocha test is just a function!
@@ -105,18 +106,17 @@ describe('MasterCard', function() {
   // Expect syntax is one way to do this, but there are others.
   // If you want to know more, check out the documentation.
   //   http://chaijs.com/api/bdd/
-  var expect = chai.expect;
 
   it('has a prefix of 51 and a length of 16', function() {
-    expect(detectNetwork('5112345678901234')).to.equal('MasterCard');
+    detectNetwork('5112345678901234').should.equal('MasterCard');
   });
 
   it('has a prefix of 52 and a length of 16', function() {
-    expect(detectNetwork('5212345678901234')).to.equal('MasterCard');
+    detectNetwork('5212345678901234').should.equal('MasterCard');
   });
 
   it('has a prefix of 53 and a length of 16', function() {
-    expect(detectNetwork('5312345678901234')).to.equal('MasterCard');
+    detectNetwork('5312345678901234').should.equal('MasterCard');
   });
 
 
@@ -127,7 +127,6 @@ describe('MasterCard', function() {
   // and should, but that's just for learning), so once you've gotten
   // these tests to pass using should syntax, refactor your tests to
   // use either expect or should, but not both.
-  var should = chai.should();
 
   it('has a prefix of 54 and a length of 16', function() {
     detectNetwork('5412345678901234').should.equal('MasterCard');
@@ -174,14 +173,23 @@ describe('Maestro', function() {
   var tailNumbers = '123456789012345';
   for (i = 0; i < prefixes.length; i++){
     //for each card length
-    for (j = 12; j < 20; j++){
-      //generate a card from prefix and tail
-      var currentCard = prefixes[i] + tailNumbers.slice(0, j-4);
-      console.log(currentCard);
-      it('has a prefix of ' + prefixes[i] + ' and a length of ' + j, function(){
-         detectNetwork(currentCard).should.equal('Maestro')
-      });
+    for (var j = 12; j < 20; j++){
+      (function (j) {
+        //generate a card from prefix and tail
+        var currentCard = prefixes[i] + tailNumbers.slice(0, j-4);
+        it('has a prefix of ' + prefixes[i] + ' and a length of ' + j, function(){
+          detectNetwork(currentCard).should.equal('Maestro')
+        });
+      })(j)
     }
   }
+});
+
+describe('China UnionPay', function(){
+
+});
+
+describe('Switch', function(){
+
 
 });
