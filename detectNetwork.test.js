@@ -1,11 +1,3 @@
-/*
- * You'll eventually be given instructions how to use this file
- * If you want to use it before then, you'll have to figure it out yourself
- */
-
-// You don't actually want to fill *this* value in on line 9, but you'll see
-// other places in this file where you'll replace the FILL_ME_IN with a
-// different value.
 var FILL_ME_IN = 'Fill this value in';
 var should = chai.should();
 
@@ -120,14 +112,6 @@ describe('MasterCard', function() {
   });
 
 
-  // You can also use should instead of expect, which changes the style
-  // slightly. It really doesn't matter which one you use - check out
-  // http://chaijs.com/guide/styles/ for more info, but it's important
-  // to be consistent (unlike in this file, where we use BOTH expect
-  // and should, but that's just for learning), so once you've gotten
-  // these tests to pass using should syntax, refactor your tests to
-  // use either expect or should, but not both.
-
   it('has a prefix of 54 and a length of 16', function() {
     detectNetwork('5412345678901234').should.equal('MasterCard');
   });
@@ -185,11 +169,54 @@ describe('Maestro', function() {
   }
 });
 
+
 describe('China UnionPay', function(){
+  var prefixes = [[622126, 622925], [624, 626], [6282, 6288]];
+  //generates a card string from 2 ints
+  function generateCard(prefix, length){
+    var cardString = prefix.toString();
+    while (cardString.length < length){
+      cardString += '0';
+    }
+    return cardString;
+  }
+  //for each start/end number in prefixes array
+  for (i = 0; i < prefixes.length; i++){
+    //for each prefix from start to end
+    for (j = prefixes[i][0]; j < prefixes[i][1] + 1; j++){
+      //for each card length
+      for (var k = 16; k < 20; k++){
+        (function (k) {
+          var currentCard = generateCard(j, k);
+          it('has a prefix of ' + j + ' and a length of ' + k, function(){
+            detectNetwork(currentCard).should.equal('China UnionPay')
+          });
+        })(k)
+      }
+    }
+  }
 
 });
 
 describe('Switch', function(){
+  var prefixes = [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759];
+  var lengths = [16, 18, 19];
+  function generateCard(prefix, length){
+    var cardString = prefix.toString();
+    while (cardString.length < length){
+      cardString += '0';
+    }
+    return cardString;
+  }
 
-
+  for (i = 0; i < prefixes.length; i++){
+    for (var j = 0; j < lengths.length; j++){
+      (function(j){
+        var currentCard = generateCard(prefixes[i], lengths[j]);
+        it(currentCard + ' has a prefix of ' + prefixes[i].toString() + ' and a length of ' + lengths[j].toString(), function(){
+          detectNetwork(currentCard).should.equal('Switch')
+        });
+      })(j)
+    }
+  }
 });
