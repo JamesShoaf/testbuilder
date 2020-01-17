@@ -146,10 +146,7 @@ describe('Discover', function() {
     detectNetwork('6011123456789012').should.equal('Discover');
   });
   it('has a prefix of 6011 and a length of 19', function() {
-    detectNetwork('6011123456789012').should.equal('Discover');
-  });
-  it('has a prefix of 644 and a length of 16', function() {
-    detectNetwork('6441234567890123').should.equal('Discover')
+    detectNetwork('6011123456789012345').should.equal('Discover');
   });
   var tailNumbers = '1234567890123456'
   for (var prefix = 644; prefix <= 649; prefix++) {
@@ -162,7 +159,11 @@ describe('Discover', function() {
       });
     })(prefix)
   }
-
+  it('has a prefix of 65 and a length of 16', function() {
+    detectNetwork('6541234567890123').should.equal('Discover')
+  });it('has a prefix of 65 and a length of 19', function() {
+    detectNetwork('6541234567890123456').should.equal('Discover')
+  });
 
 });
 
@@ -176,6 +177,7 @@ describe('Maestro', function() {
     for (j = 12; j < 20; j++){
       //generate a card from prefix and tail
       var currentCard = prefixes[i] + tailNumbers.slice(0, j-4);
+      console.log(currentCard);
       it('has a prefix of ' + prefixes[i] + ' and a length of ' + j, function(){
          detectNetwork(currentCard).should.equal('Maestro')
       });
